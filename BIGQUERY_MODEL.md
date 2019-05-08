@@ -20,7 +20,7 @@ FROM stocker.content c
 JOIN stocker.price p on c.symbol = p.symbol
   AND FORMAT_TIMESTAMP('%Y-%m-%d', c.created) = FORMAT_TIMESTAMP('%Y-%m-%d', p.quotedAt)
 WHERE c.score <> 0
-AND RAND() < 0.02
+AND RAND() < 0.01
 ```
 
 results in
@@ -85,6 +85,7 @@ mean_absolute_error	 mean_squared_error	 mean_squared_log_error	 median_absolute
 #standardSQL
 INSERT stocker.price_prediction (
    symbol,
+   prediction_date,
    after_closing_price,
    predicted_price
 ) WITH T AS (
@@ -107,7 +108,7 @@ INSERT stocker.price_prediction (
         AND FORMAT_TIMESTAMP('%Y-%m-%d', c.created) = FORMAT_TIMESTAMP('%Y-%m-%d', p.quotedAt)
   )) dt
   join stocker.price p on p.symbol =  dt.symbol
-  where p.closingDate = FORMAT_TIMESTAMP('%Y-%m-%d', CURRENT_TIMESTAMP()) -- assumes after market close exec
+  where p.closingDate = FORMAT_TIMESTAMP('%Y-%m-%d', CURRENT_TIMESTAMP(), "America/Los_Angeles")
   group by
     dt.symbol,
     p.closingPrice
@@ -115,6 +116,7 @@ INSERT stocker.price_prediction (
 )
 SELECT
    symbol,
+   FORMAT_TIMESTAMP('%Y-%m-%d', CURRENT_TIMESTAMP(), "America/Los_Angeles"),
    after_closing_price,
    predicted_price
 FROM T
