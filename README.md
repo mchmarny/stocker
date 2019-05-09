@@ -7,7 +7,7 @@ Using tweeter sentiment and stock market price signal correlation to predict nex
 Dependant components
 
 * [stockercm](https://github.com/mchmarny/stockercm) - Twitter data source
-* [stockermart](https://github.com/mchmarny/stockermart) = Stock market data downloader
+* [stockermart](https://github.com/mchmarny/stockermart) - Stock market data downloader
 * [stockercm](https://github.com/mchmarny/stockercm) - Sentiment processor
 
 Once you get the data flow configured using these components, you can follow the following linear regression model creation, its evaluation against your data set, and running predictions using the trained model.
